@@ -1,11 +1,29 @@
 <template>
     <header>
         <h1>
-            <img src="../assets/logo.png" alt="">
+            <img src="../assets/logo.png" alt="" style="width: 100%">
         </h1>
-        <button class="button" @click="changeTheme">
-            {{ buttonText }}
-        </button>
+        <div class="buttonContainer">
+            <button class="button" @click="changeTheme">
+                {{ buttonText }}
+            </button>
+        </div>
+        <nav class="panel mt-5">
+            <ul>
+                <li>
+                    <router-link to="/" class="routerLink">
+                        <i class="fas fa-tasks"></i>
+                        Tasks
+                    </router-link>
+                </li>
+                <li>
+                    <router-link to="/projects" class="routerLink">
+                        <i class="fas fa-project-diagram"></i>
+                        Projects
+                    </router-link>
+                </li>
+            </ul>
+        </nav>
     </header>
 </template>
 
@@ -49,9 +67,32 @@ header {
     text-align: center;
 }
 
-.button {
+.buttonContainer {
+    width: 100%;
+}
+
+.buttonContainer .button {
     width: 100%;
     border-radius: 8px;
+}
+
+.panel li {
+    margin: 8px 0;
+    display: grid;
+    justify-content: flex-start;
+    gap: 5px;
+}
+
+.routerLink {
+    color: #fff;
+}
+
+.routerLink:hover {
+    color: #faf0ca;
+}
+
+.routerLink.router-link-active {
+    color: #faf0ca;
 }
 
 @media only screen and (max-width: 768px) {
