@@ -1,35 +1,33 @@
 <template>
     <section class="projects">
         <h1 class="title">Projects</h1>
-        <form @submit.prevent="saveProject">
-            <div class="field">
-                <label for="projectName" class="label">
-                    Project Name: 
-                </label>
-                <input 
-                    type="text" 
-                    class="input" 
-                    id="projectName" 
-                    v-model="projectName"
-                />
-            </div>
-            <div class="field">
-                <button class="button" type="submit">
-                    Save
-                </button>
-            </div>
-        </form>
+        <router-link to="/projects/new" class="button">
+            <span class="icon is-small">
+                <i class="fas fa-plus"></i>
+            </span>
+            <span>New Project</span>
+        </router-link>
         <table class="table is-fullwidth">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>
+                        Actions
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="project in projects" :key="project.id">
                     <td>{{ project.id }}</td>
                     <td> {{ project.name }}</td>
+                    <td>
+                        <router-link :to="`/projects/${project.id}`" class="button">
+                            <span class="icon is-small">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </router-link>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -38,28 +36,16 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue';
-import IProjects from '../interfaces/IProjects';
+import { computed, defineComponent } from 'vue';
+import { useStore } from '@/store';
 
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
     name: "Projects",
-    data() {
+    setup() {
+        const store = useStore();
         return {
-            projectName: "",
-            projects: [] as IProjects[]
-
-        }
-    },
-    methods: {
-        saveProject() {
-            const project: IProjects = {
-                name: this.projectName,
-                id: new Date().toISOString()
-            }
-
-            this.projects.push(project);
-            this.projectName = "";
+            projects: computed(() => store.state.projects)
         }
     }
 })

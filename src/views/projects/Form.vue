@@ -1,0 +1,77 @@
+<template>
+    <section class="projects">
+        <h1 class="title">Projects</h1>
+        <form @submit.prevent="saveProject">
+            <div class="field">
+                <label for="projectName" class="label">
+                    Project Name: 
+                </label>
+                <input 
+                    type="text" 
+                    class="input" 
+                    id="projectName" 
+                    v-model="projectName"
+                />
+            </div>
+            <div class="field">
+                <button class="button" type="submit">
+                    Save
+                </button>
+            </div>
+        </form>
+    </section>
+</template>
+
+<script lang="ts">
+
+import { defineComponent } from 'vue';
+import { useStore } from '@/store';
+
+export default defineComponent({
+    // eslint-disable-next-line vue/multi-word-component-names
+    name: "Form",
+    props: {
+        id: { type: String }
+    },
+    mounted () {
+        if (this.id) {
+            const project = this.store.state.projects.find(proj => proj.id == this.id);
+            this.projectName = project?.name ?? "";
+        }
+    },
+    data() {
+        return {
+            projectName: ""
+        }
+    },
+    methods: {
+        saveProject() {
+            if (this.id) {
+                this.store.commit('ALTER_PROJECT', {
+                    id: this.id,
+                    name: this.projectName
+                })
+            } else {
+                this.store.commit('ADD_PROJECT', this.projectName);
+            }
+            this.projectName = "";
+            this.$router.push('/projects')
+        }
+    },
+    setup() {
+        const store = useStore();
+        return {
+            store
+        }
+    }
+})
+
+</script>
+
+<style scoped>
+
+.projects {
+    padding: 1.25rem;
+}
+
+</style>
