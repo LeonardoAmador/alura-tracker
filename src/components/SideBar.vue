@@ -49,10 +49,20 @@ header {
     text-align: center;
 }
 
+.button {
+    width: 100%;
+    border-radius: 8px;
+}
+
 @media only screen and (max-width: 768px) {
     header {
         padding: 2.5rem;
         height: auto;
+    }
+
+    .button {
+        width: 54.5%;
+        border-radius: 8px;
     }
 }
 
