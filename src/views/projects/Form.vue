@@ -25,6 +25,7 @@
 
 import { defineComponent } from 'vue';
 import { useStore } from '@/store';
+import { ADD_PROJECT, ALTER_PROJECT } from '@/store/mutations-type';
 
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
@@ -46,12 +47,12 @@ export default defineComponent({
     methods: {
         saveProject() {
             if (this.id) {
-                this.store.commit('ALTER_PROJECT', {
+                this.store.commit(ALTER_PROJECT, {
                     id: this.id,
                     name: this.projectName
                 })
             } else {
-                this.store.commit('ADD_PROJECT', this.projectName);
+                this.store.commit(ADD_PROJECT, this.projectName);
             }
             this.projectName = "";
             this.$router.push('/projects')

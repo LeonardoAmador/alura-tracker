@@ -26,6 +26,11 @@
                                 <i class="fas fa-pencil-alt"></i>
                             </span>
                         </router-link>
+                        <button class="button ml-2 is-danger" @click="remove(project.id)">
+                            <span class="icon is-small">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -37,14 +42,21 @@
 
 import { computed, defineComponent } from 'vue';
 import { useStore } from '@/store';
+import { REMOVE_PROJECT } from '@/store/mutations-type';
 
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
     name: "List",
+    methods: {
+        remove(id: string) {
+            this.store.commit(REMOVE_PROJECT, id)
+        }
+    },
     setup() {
         const store = useStore();
         return {
-            projects: computed(() => store.state.projects)
+            projects: computed(() => store.state.projects),
+            store
         }
     }
 })
