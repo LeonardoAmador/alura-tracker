@@ -1,6 +1,6 @@
 <template>
     <Box>
-        <div class="columns">
+        <div class="columns clickable" @click="clickedTask">
             <div class="column is-4">
                 {{ task.description || "Task without description" }}
             </div>
@@ -24,6 +24,7 @@ import Box from './Box.vue';
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
     name: "Task",
+    emits: ["whenClickTask"],
     components: {
         Stopwatch,
         Box
@@ -33,8 +34,20 @@ export default defineComponent({
             type: Object as PropType<ITask>,
             required: true
         }
+    },
+    methods: {
+        clickedTask(): void {
+            this.$emit("whenClickTask", this.task)
+        }
     }
 })
 
 </script>
 
+<style scoped>
+
+.clickable {
+    cursor: pointer;
+}
+
+</style>
