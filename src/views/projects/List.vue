@@ -43,6 +43,7 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from '@/store';
 import { REMOVE_PROJECT } from '@/store/mutations-type';
+import { GET_PROJECTS } from '@/store/actions-type';
 
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
@@ -54,6 +55,7 @@ export default defineComponent({
     },
     setup() {
         const store = useStore();
+        store.dispatch(GET_PROJECTS);
         return {
             projects: computed(() => store.state.projects),
             store
