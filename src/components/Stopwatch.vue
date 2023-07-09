@@ -1,7 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <section>
-        <strong class="display">{{ timeRunning }}</strong>
+        <strong class="display">
+            <span class="icon">
+                <i class="fa-regular fa-clock"></i>
+            </span>
+            <span class="time">{{ timeRunning }}</span>
+        </strong>
     </section>
 </template>
 
@@ -31,6 +36,12 @@ export default defineComponent({
 
 .display {
     color: var(--primary-text);
+    display: flex;
+    align-items: center;
+}
+
+.time {
+    margin-right: .5rem;
 }
 
 </style>
