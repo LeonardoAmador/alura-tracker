@@ -26,6 +26,8 @@
 import { defineComponent } from 'vue';
 import { useStore } from '@/store';
 import { ADD_PROJECT, ALTER_PROJECT } from '@/store/mutations-type';
+import { NotificationType } from '@/interfaces/INotifications';
+import useNotificator from '@/hooks/notificator';
 
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
@@ -55,13 +57,16 @@ export default defineComponent({
                 this.store.commit(ADD_PROJECT, this.projectName);
             }
             this.projectName = "";
+            this.notificate(NotificationType.SUCCESS, 'Great!', 'Your project is already available')
             this.$router.push('/projects')
         }
     },
     setup() {
         const store = useStore();
+        const { notificate } = useNotificator();
         return {
-            store
+            store,
+            notificate
         }
     }
 })

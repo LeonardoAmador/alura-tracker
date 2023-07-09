@@ -36,6 +36,8 @@ import { computed, defineComponent } from 'vue';
 import Timer from './Timer.vue';
 import { useStore } from 'vuex';
 import { key } from '@/store'
+import { NOTIFICATE } from '@/store/mutations-type';
+import { NotificationType } from '@/interfaces/INotifications';
 
 export default defineComponent({
     name: "FormCard",
@@ -51,6 +53,17 @@ export default defineComponent({
     },
     methods: {
         timerEnded(elapsedTime: number): void {
+            const project = this.projects.find((p) => p.id == this.projectId);
+
+            if (!project) {
+                this.store.commit(NOTIFICATE, {
+                    title: "Ops!",
+                    text: "Select a project before finishing a task!",
+                    type: NotificationType.FAILURE
+                });
+                return;
+            }
+
             this.$emit("whenSaveTask", {
                 secondDuration: elapsedTime,
                 description: this.description,
@@ -62,7 +75,8 @@ export default defineComponent({
     setup() {
         const store = useStore(key);
         return {
-            projects: computed(() => store.state.projects)
+            projects: computed(() => store.state.projects),
+            store
         }
     }
 })
