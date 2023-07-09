@@ -42,15 +42,14 @@
 
 import { computed, defineComponent } from 'vue';
 import { useStore } from '@/store';
-import { REMOVE_PROJECT } from '@/store/mutations-type';
-import { GET_PROJECTS } from '@/store/actions-type';
+import { DELETE_PROJECT, GET_PROJECTS } from '@/store/actions-type';
 
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
     name: "List",
     methods: {
         remove(id: string) {
-            this.store.commit(REMOVE_PROJECT, id)
+            this.store.dispatch(DELETE_PROJECT, id)
         }
     },
     setup() {

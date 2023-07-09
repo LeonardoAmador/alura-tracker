@@ -25,9 +25,9 @@
 
 import { defineComponent } from 'vue';
 import { useStore } from '@/store';
-import { ADD_PROJECT, ALTER_PROJECT } from '@/store/mutations-type';
 import { NotificationType } from '@/interfaces/INotifications';
 import useNotificator from '@/hooks/notificator';
+import { CHANGE_PROJECT, REGISTER_PROJECT } from '@/store/actions-type';
 
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
@@ -49,16 +49,21 @@ export default defineComponent({
     methods: {
         saveProject() {
             if (this.id) {
-                this.store.commit(ALTER_PROJECT, {
-                    id: this.id,
-                    name: this.projectName
-                })
+                this.store
+                    .dispatch(CHANGE_PROJECT, {
+                        id: this.id,
+                        name: this.projectName
+                    }).then(() => this.handleSuccess());
             } else {
-                this.store.commit(ADD_PROJECT, this.projectName);
+                this.store
+                    .dispatch(REGISTER_PROJECT, this.projectName)
+                    .then(() => this.handleSuccess());
             }
+        },
+        handleSuccess() {
             this.projectName = "";
-            this.notificate(NotificationType.SUCCESS, 'Great!', 'Your project is already available')
-            this.$router.push('/projects')
+                this.notificate(NotificationType.SUCCESS, 'Great!', 'Your project is already available')
+                this.$router.push('/projects')
         }
     },
     setup() {

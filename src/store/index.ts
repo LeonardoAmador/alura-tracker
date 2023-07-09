@@ -3,7 +3,7 @@ import { InjectionKey } from "vue";
 import { Store, createStore, useStore as vuexUseStore} from "vuex";
 import { ADD_PROJECT, ALTER_PROJECT, DEFINE_PROJECT, NOTIFICATE, REMOVE_PROJECT } from "./mutations-type";
 import { INotifications } from "@/interfaces/INotifications";
-import { GET_PROJECTS } from "./actions-type";
+import { CHANGE_PROJECT, DELETE_PROJECT, GET_PROJECTS, REGISTER_PROJECT } from "./actions-type";
 import http from "@/http";
 
 interface State {
@@ -49,6 +49,18 @@ export const store = createStore<State>({
         [GET_PROJECTS]({ commit }) {
             http.get("projects")
                 .then(response => commit(DEFINE_PROJECT, response.data))
+        },
+        [REGISTER_PROJECT](context, projectName: string) {
+            return http.post("/projects", {
+                name: projectName
+            })
+        },
+        [CHANGE_PROJECT](context, project: IProjects) {
+            return http.put(`/projects/${project.id}`, project);
+        },
+        [DELETE_PROJECT]({ commit }, id: string) {
+            return http.delete(`/projects/${id}`)
+                .then(() => commit(REMOVE_PROJECT, id));
         }
     }
 });
