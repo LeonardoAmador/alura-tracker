@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="column">
-                <Timer @timerEnded="timerEnded"/>
+                <Timer @timerEnded="saveTask"/>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
 
 <script lang="ts">
 
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import Timer from './Timer.vue';
 import { useStore } from 'vuex';
 import { key } from '@/store'
@@ -45,18 +45,19 @@ export default defineComponent({
     components: {
         Timer
     },
-    data() {
-        return {
-            description: "",
-            projectId: ""
-        }
-    },
-    methods: {
-        timerEnded(elapsedTime: number): void {
-            const project = this.projects.find((p) => p.id == this.projectId);
+    setup(props, { emit }) {
+        const store = useStore(key);
+
+        const description = ref("");
+        const projectId = ref("");
+
+        const projects = computed(() => store.state.project.projects);
+
+        const saveTask = (elapsedTime: number): void => {
+            const project = projects.value.find((p) => p.id == projectId.value);
 
             if (!project) {
-                this.store.commit(NOTIFICATE, {
+                store.commit(NOTIFICATE, {
                     title: "Ops!",
                     text: "Select a project before finishing a task!",
                     type: NotificationType.FAILURE
@@ -64,19 +65,19 @@ export default defineComponent({
                 return;
             }
 
-            this.$emit("whenSaveTask", {
+            emit("whenSaveTask", {
                 secondDuration: elapsedTime,
-                description: this.description,
-                project: this.projects.find(proj => proj.id == this.projectId)
+                description: description.value,
+                project: projects.value.find(proj => proj.id == projectId.value)
             })
-            this.description = "";
+            description.value = "";
         }
-    },
-    setup() {
-        const store = useStore(key);
+
         return {
-            projects: computed(() => store.state.project.projects),
-            store
+            projects,
+            description,
+            projectId,
+            saveTask
         }
     }
 })

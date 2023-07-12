@@ -24,21 +24,24 @@ import Box from './Box.vue';
 export default defineComponent({
     // eslint-disable-next-line vue/multi-word-component-names
     name: "Task",
-    emits: ["whenClickTask"],
     components: {
         Stopwatch,
         Box
     },
+    emits: ["whenClickTask"],
     props: {
         task: {
             type: Object as PropType<ITask>,
             required: true
         }
     },
-    methods: {
-        clickedTask(): void {
-            this.$emit("whenClickTask", this.task)
+    setup(props, { emit }) {
+        
+        const clickedTask = (): void => {
+            emit("whenClickTask", props.task)
         }
+
+        return { clickedTask }
     }
 })
 

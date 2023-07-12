@@ -52,7 +52,7 @@ export default defineComponent({
     },
     data() {
         return {
-            selectedTask: null as ITask | null
+            selectedTask: null as ITask | null,
         }
     },
     methods: {

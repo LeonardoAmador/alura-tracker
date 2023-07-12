@@ -10,6 +10,9 @@ export interface TaskState {
 }
 
 export const task: Module<TaskState, State> = {
+    state: {
+        tasks: []
+    },
     mutations: {
         [DEFINE_TASKS](state, tasks: ITask[]) {
             state.tasks = tasks;
