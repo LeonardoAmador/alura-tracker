@@ -23,7 +23,7 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useStore } from '@/store';
 import { NotificationType } from '@/interfaces/INotifications';
 import useNotificator from '@/hooks/notificator';
@@ -34,17 +34,6 @@ export default defineComponent({
     name: "Form",
     props: {
         id: { type: String }
-    },
-    mounted () {
-        if (this.id) {
-            const project = this.store.state.project.projects.find(proj => proj.id == this.id);
-            this.projectName = project?.name ?? "";
-        }
-    },
-    data() {
-        return {
-            projectName: ""
-        }
     },
     methods: {
         saveProject() {
@@ -66,12 +55,21 @@ export default defineComponent({
                 this.$router.push('/projects')
         }
     },
-    setup() {
+    setup(props) {
         const store = useStore();
         const { notificate } = useNotificator();
+
+        const projectName = ref("");
+
+        if (props.id) {             
+            const project = store.state.project.projects.find(proj => proj.id == props.id);
+            projectName.value = project?.name ?? "";
+        }
+
         return {
             store,
-            notificate
+            notificate,
+            projectName
         }
     }
 })
