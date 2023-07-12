@@ -1,19 +1,4 @@
 {
-  "projects": [
-    {
-      "name": "Study Vue Js",
-      "id": 1
-    }
-  ],
-  "tasks": [
-    {
-      "secondDuration": 3,
-      "description": "Study vuex",
-      "project": {
-        "name": "Study Vue Js",
-        "id": 1
-      },
-      "id": 1
-    }
-  ]
+  "projects": [],
+  "tasks": []
 }

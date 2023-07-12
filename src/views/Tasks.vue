@@ -80,7 +80,7 @@ export default defineComponent({
         store.dispatch(GET_TASKS);
         store.dispatch(GET_PROJECTS);
         return {
-            tasks: computed(() => store.state.tasks),
+            tasks: computed(() => store.state.task.tasks),
             store
         }
     }
