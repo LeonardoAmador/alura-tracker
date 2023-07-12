@@ -13,20 +13,20 @@
                     <button class="delete" aria-label="close" @click="closeModal"></button>
                 </header>
                 <section class="modal-card-body">
-                <div class="field">
-                    <label for="taskDescription" class="label">
-                        Description: 
-                    </label>
-                    <input 
-                        type="text" 
-                        class="input" 
-                        id="taskDescription" 
-                        v-model="selectedTask.description"
-                    />
-                </div>
+                    <div class="field">
+                        <label for="taskDescription" class="label">
+                            Description: 
+                        </label>
+                        <input 
+                            type="text" 
+                            class="input" 
+                            id="taskDescription" 
+                            v-model="selectedTask.description"
+                        />
+                    </div>
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button is-success">Save changes</button>
+                    <button class="button is-success" @click="alterTask">Save changes</button>
                     <button class="button" @click="closeModal">Cancel</button>
                 </footer>
             </div>
@@ -40,7 +40,7 @@ import FormCard from "../components/FormCard.vue";
 import Task from "../components/Task.vue";
 import Box from "../components/Box.vue";
 import { useStore } from "@/store";
-import { GET_PROJECTS, GET_TASKS, REGISTER_TASK } from "@/store/actions-type";
+import { ALTER_TASK, GET_PROJECTS, GET_TASKS, REGISTER_TASK } from "@/store/actions-type";
 import ITask from "@/interfaces/ITask";
 
 export default defineComponent({
@@ -64,6 +64,10 @@ export default defineComponent({
         },
         closeModal() {
             this.selectedTask = null;
+        },
+        alterTask() {
+            this.store.dispatch(ALTER_TASK, this.selectedTask)
+                .then(() => this.closeModal());
         }
     },
     computed: {

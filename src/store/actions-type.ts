@@ -5,3 +5,4 @@ export const DELETE_PROJECT = "DELETE_PROJECT";
 
 export const GET_TASKS = "GET_TASKS";
 export const REGISTER_TASK = "REGISTER_TASK";
+export const ALTER_TASK = "ALTER_TASK";
