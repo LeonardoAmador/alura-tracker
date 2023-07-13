@@ -12,7 +12,7 @@
   "tasks": [
     {
       "secondDuration": 2,
-      "description": "vuex",
+      "description": "vuex 5",
       "project": {
         "name": "Study Vue Js",
         "id": 1

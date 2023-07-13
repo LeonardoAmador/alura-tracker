@@ -19,43 +19,41 @@
             <span class="has-text-weight-bold">:(</span>
         </Box>
         <Task v-for="(task, i) in tasks" :key="i" :task="task" @whenClickTask="selectTask"/>
-        <div class="modal" :class="{ 'is-active': selectedTask }" v-if="selectedTask">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Edit task</p>
-                    <button class="delete" aria-label="close" @click="closeModal"></button>
-                </header>
-                <section class="modal-card-body">
-                    <div class="field">
-                        <label for="taskDescription" class="label">
-                            Description: 
-                        </label>
-                        <input 
-                            type="text" 
-                            class="input" 
-                            id="taskDescription" 
-                            v-model="selectedTask.description"
-                        />
-                    </div>
-                </section>
-                <footer class="modal-card-foot">
-                    <button class="button is-success" @click="alterTask">Save changes</button>
-                    <button class="button" @click="closeModal">Cancel</button>
-                </footer>
-            </div>
-        </div>
+        <Modal :show="selectedTask != null">
+            <template v-slot:header>
+                <p class="modal-card-title">Edit task</p>
+                <button class="delete" aria-label="close" @click="closeModal"></button>
+            </template>
+            <template v-slot:body>
+                <div class="field">
+                    <label for="taskDescription" class="label">
+                        Description: 
+                    </label>
+                    <input 
+                        type="text" 
+                        class="input" 
+                        id="taskDescription" 
+                        v-model="selectedTask.description"
+                    />
+                </div>
+            </template>
+            <template v-slot:footer>
+                <button class="button is-success" @click="alterTask">Save changes</button>
+                <button class="button" @click="closeModal">Cancel</button>
+            </template>
+        </Modal>
     </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watchEffect } from "vue";
 import FormCard from "../components/FormCard.vue";
 import Task from "../components/Task.vue";
 import Box from "../components/Box.vue";
 import { useStore } from "@/store";
 import { ALTER_TASK, GET_PROJECTS, GET_TASKS, REGISTER_TASK } from "@/store/actions-type";
 import ITask from "@/interfaces/ITask";
+import Modal from '../components/Modal.vue';
 
 export default defineComponent({
     name: "App",
@@ -63,6 +61,7 @@ export default defineComponent({
         FormCard,
         Task,
         Box,
+        Modal
     },
     data() {
         return {
@@ -93,17 +92,15 @@ export default defineComponent({
         const store = useStore();
         store.dispatch(GET_TASKS);
         store.dispatch(GET_PROJECTS);
-
+        
         const filter = ref("");
 
-        const tasks = computed(() => 
-            store.state.task.tasks.filter(
-                (t) => !filter.value || t.description.includes(filter.value)
-            )
-        );
+        watchEffect(() => {
+            store.dispatch(GET_TASKS, filter.value);
+        });
 
         return {
-            tasks,
+            tasks: computed(() => store.state.task.tasks),
             store,
             filter
         }
