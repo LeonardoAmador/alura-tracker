@@ -2,5 +2,5 @@
 
 ## Project deployment
 ```
-https://alura-tracker-9q2uefxby-leonardoamador.vercel.app/#/
+alura-tracker-6ln4o2kav-leonardoamador.vercel.app
 ```
