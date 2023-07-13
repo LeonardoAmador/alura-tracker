@@ -1,10 +1,24 @@
 <template>
     <FormCard @whenSaveTask="saveTask" />
     <div class="list">
-        <Task v-for="(task, i) in tasks" :key="i" :task="task" @whenClickTask="selectTask"/>
-        <Box v-if="isListEmpty"> 
-            You aren't very productive today :( 
+        <div class="field">
+            <p class="control has-icons-left">
+                <input 
+                    type="text" 
+                    class="input" 
+                    placeholder="Enter to filter" 
+                    v-model="filter"
+                >
+                <span class="icon is-small is-left">
+                    <i class="fas fa-search"></i>
+                </span>
+            </p>
+        </div>
+        <Box v-if="isListEmpty">
+            You aren't very productive today 
+            <span class="has-text-weight-bold">:(</span>
         </Box>
+        <Task v-for="(task, i) in tasks" :key="i" :task="task" @whenClickTask="selectTask"/>
         <div class="modal" :class="{ 'is-active': selectedTask }" v-if="selectedTask">
             <div class="modal-background"></div>
             <div class="modal-card">
@@ -35,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import FormCard from "../components/FormCard.vue";
 import Task from "../components/Task.vue";
 import Box from "../components/Box.vue";
@@ -79,9 +93,19 @@ export default defineComponent({
         const store = useStore();
         store.dispatch(GET_TASKS);
         store.dispatch(GET_PROJECTS);
+
+        const filter = ref("");
+
+        const tasks = computed(() => 
+            store.state.task.tasks.filter(
+                (t) => !filter.value || t.description.includes(filter.value)
+            )
+        );
+
         return {
-            tasks: computed(() => store.state.task.tasks),
-            store
+            tasks,
+            store,
+            filter
         }
     }
 });
